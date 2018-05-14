@@ -53,23 +53,27 @@
         .future-items {
             margin-bottom: 10px;
         }
-        .wind-direction{
+
+        .wind-direction {
             border-top: 1px solid #e3e3e3;
             margin-top: 20px;
             padding-top: 20px;
         }
-        .wind-direction-title{
-            font-size:10px;
-            color:#999;
+
+        .wind-direction-title {
+            font-size: 10px;
+            color: #999;
         }
-        .speed{
+
+        .speed {
             border-top: 1px solid #e3e3e3;
             margin-top: 20px;
             padding-top: 20px;
         }
-        .speed-title{
-            font-size:10px;
-            color:#999;
+
+        .speed-title {
+            font-size: 10px;
+            color: #999;
         }
     </style>
 </head>
@@ -106,6 +110,9 @@
                     </li>
                     <li>
                         <a href="#">成都</a>
+                    </li>
+                    <li>
+                        <a href="#">武汉</a>
                     </li>
                     <li>
                         <a href="#">重庆</a>
@@ -171,14 +178,14 @@
             var today = data[0];
             $('.title-city').text(today.citynm);
             $('.title-weather').text(today.weather);
-            $('.title-temperature').text(today.temp_high+'°');
+            $('.title-temperature').text(today.temp_high + '°');
             $('.today-week').text(today.week);
             $('.temperature-max').text(today.temp_high);
             $('.temperature-min').text(today.temp_low);
             $('.wind-direction-content').text(today.wind);
             $('.speed-content').text(today.winp);
             data.forEach(function (ele, index) {
-                if(index>0){
+                if (index > 0) {
                     str += `
                 <div class="future-items row">
                     <div class="future-week col-xs-3">${ele.week}</div>
@@ -189,12 +196,12 @@
                     </div>
                 </div>
                 `
-                $('.content-future').html(str);
+                    $('.content-future').html(str);
                 }
-                
+
             })
         }
-        $('.city-list').on('click',function(e){
+        $('.city-list').on('click', function (e) {
             $('.city-title').text(e.target.text);
             $('.nav-inp').val(e.target.text).trigger("input");
         })
