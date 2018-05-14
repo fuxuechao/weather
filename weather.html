@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .nav {
+            display: flex;
+        }
+
+        .nav-inp {
+            flex: 1;
+        }
+
+        /* .content {
+            width: 100%;
+            height: 500px;
+        } */
+
+        .content-title {
+            display: flex;
+            /* justify-content:center; */
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .title-city {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 20px 0 5px;
+        }
+
+        .title-weather {
+            font-size: 15px;
+        }
+
+        .title-temperature {
+            margin: 10px 0;
+            font-size: 55px;
+        }
+
+        .content-future {
+            border-top: 1px solid #e3e3e3;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .future-items {
+            margin-bottom: 10px;
+        }
+        .wind-direction{
+            border-top: 1px solid #e3e3e3;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+        .wind-direction-title{
+            font-size:10px;
+            color:#999;
+        }
+        .remark{
+            border-top: 1px solid #e3e3e3;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+        .remark-title{
+            font-size:10px;
+            color:#999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="nav">
+            <div class="btn-group nav-city">
+                <button type="button" class="btn btn-default dropdown-toggle city-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="city-title">北京</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu city-list">
+                    <li>
+                        <a href="#">北京</a>
+                    </li>
+                    <li>
+                        <a href="#">南京</a>
+                    </li>
+                    <li>
+                        <a href="#">上海</a>
+                    </li>
+                    <li>
+                        <a href="#">杭州</a>
+                    </li>
+                    <li>
+                        <a href="#">苏州</a>
+                    </li>
+                    <li>
+                        <a href="#">天津</a>
+                    </li>
+                    <li>
+                        <a href="#">深圳</a>
+                    </li>
+                    <li>
+                        <a href="#">成都</a>
+                    </li>
+                    <li>
+                        <a href="#">重庆</a>
+                    </li>
+                </ul>
+            </div>
+            <input type="text" class="form-control nav-inp">
+        </div>
+
+        <div class="content">
+            <div class="content-title">
+                <div class="title-city"></div>
+                <div class="title-weather"></div>
+                <div class="title-temperature"></div>
+            </div>
+            <div class="content-today row">
+                <div class="today-week col-xs-3"></div>
+                <div class="today-date col-xs-6 text-center">今天</div>
+                <div class="today-temperature col-xs-3 row">
+                    <div class="temperature-max col-xs-6"></div>
+                    <div class="temperature-min col-xs-6"></div>
+                </div>
+            </div>
+            <div class="content-future">
+                <!-- <div class="future-items row">
+                    <div class="future-week col-xs-3">星期一</div>
+                    <div class="future-weather col-xs-6 text-center">晴</div>
+                    <div class="future-temperature col-xs-3 row">
+                        <div class="temperature-max col-xs-6">29</div>
+                        <div class="temperature-min col-xs-6">17</div>
+                    </div>
+                </div>
+                <div class="future-items row">
+                    <div class="future-week col-xs-3">星期一</div>
+                    <div class="future-weather col-xs-6 text-center">晴</div>
+                    <div class="future-temperature col-xs-3 row">
+                        <div class="temperature-max col-xs-6">29</div>
+                        <div class="temperature-min col-xs-6">17</div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="wind-direction">
+                <div class="wind-direction-title">风向</div>
+                <div class="wind-direction-content"></div>
+            </div>
+            <div class="remark">
+                <div class="remark-title">备注</div>
+                <div class="remark-content"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('input').on('input', function () {
+            var value = this.value;
+            var script = document.createElement('script');
+            script.src = 'http://wthrcdn.etouch.cn/weather_mini?city=' + value + '&callback=aa';
+            $('body').append(script);
+        })
+        function aa(e) {
+            var str = '';
+            console.log(e)
+            var data = e.data;
+            $('.title-city').text(data.city);
+            $('.title-weather').text(data.forecast[0].type);
+            $('.title-temperature').text(data.wendu + '°');
+            $('.today-week').text(data.forecast[0].date.substr(3));
+            $('.temperature-max').text(data.forecast[0].high.substr(2));
+            $('.temperature-min').text(data.forecast[0].low.substr(2));
+            data.forecast.forEach(function (ele, index) {
+                str += `
+                <div class="future-items row">
+                    <div class="future-week col-xs-3">${ele.date.substr(3)}</div>
+                    <div class="future-weather col-xs-6 text-center">${ele.type}</div>
+                    <div class="future-temperature col-xs-3 row">
+                        <div class="temperature-max col-xs-6">${ele.high.substr(2)}</div>
+                        <div class="temperature-min col-xs-6">${ele.low.substr(2)}</div>
+                    </div>
+                </div>
+                `
+                $('.content-future').html(str);
+            })
+            $('.wind-direction-content').text(data.forecast[0].fengxiang);
+            $('.remark-content').text(data.ganmao);
+        }
+        $('.city-list').on('click',function(e){
+            $('.city-title').text(e.target.text);
+            $('.nav-inp').val(e.target.text).trigger("input");
+        })
+        $('.nav-inp').val($('.city-title').text()).trigger("input");
+    </script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
