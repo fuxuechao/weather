@@ -62,12 +62,12 @@
             font-size:10px;
             color:#999;
         }
-        .remark{
+        .speed{
             border-top: 1px solid #e3e3e3;
             margin-top: 20px;
             padding-top: 20px;
         }
-        .remark-title{
+        .speed-title{
             font-size:10px;
             color:#999;
         }
@@ -125,8 +125,8 @@
                 <div class="today-week col-xs-3"></div>
                 <div class="today-date col-xs-6 text-center">今天</div>
                 <div class="today-temperature col-xs-3 row">
-                    <div class="temperature-max col-xs-6"></div>
-                    <div class="temperature-min col-xs-6"></div>
+                    <div class="temperature-max col-xs-6 text-center"></div>
+                    <div class="temperature-min col-xs-6 text-center"></div>
                 </div>
             </div>
             <div class="content-future">
@@ -151,9 +151,9 @@
                 <div class="wind-direction-title">风向</div>
                 <div class="wind-direction-content"></div>
             </div>
-            <div class="remark">
-                <div class="remark-title">备注</div>
-                <div class="remark-content"></div>
+            <div class="speed">
+                <div class="speed-title">风速</div>
+                <div class="speed-content"></div>
             </div>
         </div>
     </div>
@@ -161,34 +161,38 @@
         $('input').on('input', function () {
             var value = this.value;
             var script = document.createElement('script');
-            script.src = 'http://wthrcdn.etouch.cn/weather_mini?city=' + value + '&callback=aa';
+            script.src = 'https://sapi.k780.com/?app=weather.future&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json&jsoncallback=aa&weaid=' + value;
             $('body').append(script);
         })
         function aa(e) {
             var str = '';
             console.log(e)
-            var data = e.data;
-            $('.title-city').text(data.city);
-            $('.title-weather').text(data.forecast[0].type);
-            $('.title-temperature').text(data.wendu + '°');
-            $('.today-week').text(data.forecast[0].date.substr(3));
-            $('.temperature-max').text(data.forecast[0].high.substr(2));
-            $('.temperature-min').text(data.forecast[0].low.substr(2));
-            data.forecast.forEach(function (ele, index) {
-                str += `
+            var data = e.result;
+            var today = data[0];
+            $('.title-city').text(today.citynm);
+            $('.title-weather').text(today.weather);
+            $('.title-temperature').text(today.temp_high);
+            $('.today-week').text(today.week);
+            $('.temperature-max').text(today.temp_high);
+            $('.temperature-min').text(today.temp_low);
+            $('.wind-direction-content').text(today.wind);
+            $('.speed-content').text(today.winp);
+            data.forEach(function (ele, index) {
+                if(index>0){
+                    str += `
                 <div class="future-items row">
-                    <div class="future-week col-xs-3">${ele.date.substr(3)}</div>
-                    <div class="future-weather col-xs-6 text-center">${ele.type}</div>
+                    <div class="future-week col-xs-3">${ele.week}</div>
+                    <div class="future-weather col-xs-6 text-center">${ele.weather}</div>
                     <div class="future-temperature col-xs-3 row">
-                        <div class="temperature-max col-xs-6">${ele.high.substr(2)}</div>
-                        <div class="temperature-min col-xs-6">${ele.low.substr(2)}</div>
+                        <div class="temperature-max col-xs-6 text-center">${ele.temp_high}</div>
+                        <div class="temperature-min col-xs-6 text-center">${ele.temp_low}</div>
                     </div>
                 </div>
                 `
                 $('.content-future').html(str);
+                }
+                
             })
-            $('.wind-direction-content').text(data.forecast[0].fengxiang);
-            $('.remark-content').text(data.ganmao);
         }
         $('.city-list').on('click',function(e){
             $('.city-title').text(e.target.text);
